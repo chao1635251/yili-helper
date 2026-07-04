@@ -1,0 +1,23 @@
+{
+  "name": "伊犁环线自驾助手",
+  "short_name": "伊犁助手",
+  "description": "伊犁环线正反方向路线、打卡点、充电与检查清单，支持离线使用。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f8fafc",
+  "theme_color": "#102a43",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

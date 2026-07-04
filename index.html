@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>伊犁环线自驾助手</title>
+<meta name="theme-color" content="#102a43" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="伊犁助手" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+<link rel="apple-touch-startup-image" href="assets/splash-1170x2532.png" />
+<style>
+:root{--bg:#f8fafc;--ink:#0f172a;--muted:#64748b;--card:#fff;--line:#e2e8f0;--blue:#1d4ed8;--green:#047857;--amber:#b45309;--red:#b91c1c;--shadow:0 8px 24px rgba(15,23,42,.08)}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Noto Sans CJK SC",sans-serif;line-height:1.45;padding-bottom:calc(76px + env(safe-area-inset-bottom));}
+header{position:sticky;top:0;z-index:10;background:linear-gradient(135deg,#102a43,#164e63);color:#fff;padding:18px 16px 16px;border-bottom-left-radius:20px;border-bottom-right-radius:20px;box-shadow:var(--shadow)}
+header h1{margin:0;font-size:22px;letter-spacing:.4px} header p{margin:5px 0 0;color:#dbeafe;font-size:13px}.status{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.pill{font-size:12px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+main{padding:14px;max-width:900px;margin:auto}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:12px 0;padding:14px;box-shadow:var(--shadow)}.card h2{margin:0 0 8px;font-size:18px}.card h3{margin:14px 0 8px;font-size:16px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-weight:700;text-decoration:none;padding:10px 12px;cursor:pointer}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.good{background:var(--green);color:#fff;border-color:var(--green)}.btn.warn{background:#fff7ed;color:#9a3412;border-color:#fed7aa}.btn.danger{background:#fef2f2;color:var(--red);border-color:#fecaca}.btn.active{outline:3px solid #bfdbfe;background:#eff6ff;color:#1e40af}.route-title{display:flex;align-items:center;justify-content:space-between;gap:8px}.day{border-top:1px dashed #cbd5e1;padding:12px 0}.day:first-of-type{border-top:0}.tag{display:inline-block;border-radius:8px;padding:2px 7px;font-size:12px;margin-right:4px;background:#f1f5f9;color:#334155}.tag.blue{background:#dbeafe;color:#1e40af}.tag.green{background:#dcfce7;color:#166534}.tag.amber{background:#fef3c7;color:#92400e}.tag.red{background:#fee2e2;color:#991b1b}.row{display:flex;gap:8px;flex-wrap:wrap;margin:7px 0}.small{font-size:13px}.checkpoint{padding:10px 0;border-top:1px solid var(--line)}.checkpoint:first-child{border-top:0}.time{font-weight:800;color:#1e40af}.map{width:100%;border-radius:14px;border:1px solid var(--line)}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);gap:0;padding:7px 4px calc(7px + env(safe-area-inset-bottom));z-index:20}.nav button{appearance:none;border:0;background:transparent;color:#334155;font-size:11px;font-weight:700;padding:6px 2px;border-radius:10px}.nav button.active{background:#eff6ff;color:#1d4ed8}.section{display:none}.section.active{display:block}.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.check-item:first-child{border-top:0}.check-item input{width:20px;height:20px;margin-top:1px}.doclink{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:12px;margin:8px 0;text-decoration:none;color:var(--ink);background:#fff}.doclink span{font-size:20px}.notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;padding:12px;color:#7c2d12}.printOnly{display:none}@media print{header,.nav,.btn,.noPrint{display:none!important}body{padding:0;background:#fff}.section{display:block!important}.card{box-shadow:none;break-inside:avoid}.printOnly{display:block}.map{max-height:520px;object-fit:contain}}
+</style>
+</head>
+<body>
+<header>
+  <h1>伊犁环线自驾助手</h1>
+  <p>iPhone PWA版｜正反方向路线 · 打卡点 · 充电 · 规则 · 离线</p>
+  <div class="status"><span class="pill">起终点：乌鲁木齐</span><span class="pill">车型：理想 i8 纯电</span><span class="pill">人数：6人</span><span class="pill" id="offlineBadge">离线缓存检测中</span></div>
+</header>
+<main>
+<section id="home" class="section active">
+  <div class="card">
+    <h2>今天先选方向</h2>
+    <p class="muted">默认建议：独库天气好、预约好，就走反方向“先独库”；独库天气差或预约不好，就走正方向“先赛湖”。</p>
+    <div class="grid noPrint"><button class="btn primary" onclick="setRoute('reverse')">反方向：先独库</button><button class="btn" onclick="setRoute('forward')">正方向：先赛湖</button></div>
+    <div class="row"><span class="tag blue" id="currentRouteTag">当前：反方向优先</span><span class="tag green">可离线看</span><span class="tag amber">出发前查路况</span></div>
+  </div>
+  <div class="card">
+    <h2>临场选择规则</h2>
+    <div class="checkpoint"><b>选反方向：先独库</b><br><span class="muted">D3 独库能约到乌苏驿入口 8:00–12:00，天气稳定，家人状态好，D2 能在独山子/奎屯补满电。</span></div>
+    <div class="checkpoint"><b>选正方向：先赛湖</b><br><span class="muted">独库前几天天气差、预约不好、家人刚到新疆不适应，先走赛湖/伊宁/昭苏方向热身。</span></div>
+    <div class="notice"><b>一句话：</b>独库好走就先拿下独库；独库不稳就先玩伊犁和赛里木湖，等窗口。</div>
+  </div>
+  <div class="card"><h2>地图示意图</h2><img class="map" src="assets/route-map.png" alt="伊犁环线正反方向地图示意图"></div>
+</section>
+<section id="route" class="section">
+  <div class="card"><div class="route-title"><h2 id="routeTitle">路线</h2><button class="btn warn noPrint" onclick="toggleRoute()">一键切换方向</button></div><div id="routeContent"></div></div>
+</section>
+<section id="spots" class="section">
+  <div class="card"><h2>沿途值得停的点</h2><p class="muted">时间为建议值；7月以实际景区开放、天气、停车情况为准。</p><div id="spotsContent"></div></div>
+</section>
+<section id="check" class="section">
+  <div class="card"><h2>每天出发前检查清单</h2><p class="muted">勾选状态会保存在本机。换手机或清浏览器数据会清空。</p><div id="checklist"></div><button class="btn danger noPrint" onclick="resetChecklist()">清空勾选</button></div>
+</section>
+<section id="rules" class="section">
+  <div class="card"><h2>通用规则 / 注意事项</h2>
+    <h3>独库北段预约</h3><p>独库北段按预约入口和时段进入。反方向预约 <b>乌苏驿入口</b>；正方向预约 <b>那拉提入口</b>。建议抢 8:00–10:00 或 10:00–12:00，不选下午档。</p>
+    <h3>伊昭公路</h3><p>雨雾、大风、低能见度、时间太晚就绕行。不要夜间走伊昭。车上有人晕车明显，也不要硬走。</p>
+    <h3>纯电补能</h3><p>乌鲁木齐、独山子/奎屯、伊宁、那拉提、精河这些点优先补满。乔尔玛能补就补，不把它当唯一保障。</p>
+    <h3>需要放弃的情况</h3><p>独库预约失败、入口约错、那拉提没充上电、老人孩子明显不舒服、山区雨雾明显，都不要硬闯，直接切换路线或休整。</p>
+  </div>
+  <div class="card"><h2>黑白打印文件入口</h2><a class="doclink" href="docs/正反方向双执行版_可打印.pdf"><b>正反方向双执行版 PDF</b><span>›</span></a><a class="doclink" href="docs/沿途打卡点_正反方向双版_可打印.pdf"><b>沿途打卡点 PDF</b><span>›</span></a><a class="doclink" href="docs/路线地图示意图_可打印.jpg"><b>路线地图 JPG</b><span>›</span></a><a class="doclink" href="docs/正反方向双执行版_可编辑.docx"><b>Word 可编辑版</b><span>›</span></a></div>
+</section>
+</main>
+<nav class="nav noPrint"><button class="active" onclick="showTab('home',this)">首页</button><button onclick="showTab('route',this)">路线</button><button onclick="showTab('spots',this)">打卡</button><button onclick="showTab('check',this)">清单</button><button onclick="showTab('rules',this)">规则</button></nav>
+<script>
+const routes={
+reverse:{name:'反方向：先独库，后赛湖',days:[
+['D1','乌鲁木齐市区','0km','休整、检查车辆、补物资、查路况','乌鲁木齐','快充到100%'],['D2','乌鲁木齐 → 奎屯/独山子','约250km','高速热身，不进独库','独山子/奎屯','晚上再次充到100%'],['D3','独山子/乌苏驿 → 乔尔玛 → 那拉提','约250km','独库北段核心，哈希勒根达坂、乔尔玛','那拉提镇','预约乌苏驿入口；乔尔玛能补则补；到那拉提补满'],['D4','那拉提 → 特克斯','约260km','轻松转场，逛八卦城/离街','特克斯','县城正常补能'],['D5','特克斯 → 夏塔 → 昭苏','约190km','夏塔坐区间车，不重装徒步','昭苏','昭苏县城补能'],['D6','昭苏 → 伊昭公路 → 伊宁','约150km','天气好走伊昭，天气差绕行','伊宁市','伊宁补到100%'],['D7','伊宁 → 赛里木湖 → 精河','约280km','环湖、果子沟大桥，轻松收尾','精河','精河补满'],['D8','精河 → 乌鲁木齐','约380km','全程高速回乌市，准备托运/返程','乌鲁木齐','沿途服务区补能']]
+},
+forward:{name:'正方向：先赛湖，后独库',days:[
+['D1','乌鲁木齐市区','0km','休整、检查车辆、补物资、查路况','乌鲁木齐','快充到100%'],['D2','乌鲁木齐 → 精河','约380km','G30高速赶路，为赛湖腾时间','精河','县城补满'],['D3','精河 → 赛里木湖 → 伊宁','约280km','湖蓝、草原、雪山倒影，果子沟大桥','伊宁市','伊宁补到100%'],['D4','伊宁 → 伊昭公路 → 昭苏','约150km','天气好走伊昭，下午昭苏休整','昭苏','昭苏县城补能'],['D5','昭苏 → 夏塔 → 特克斯','约190km','夏塔轻玩，下午到特克斯','特克斯','县城补能'],['D6','特克斯 → 那拉提','约260km','下午玩那拉提，不贪多','那拉提镇','晚上必须补满'],['D7','那拉提 → 乔尔玛 → 独库北段 → 独山子/奎屯','约250km','预约那拉提入口；不带唐布拉','独山子/奎屯','乔尔玛能补则补；出独库后补电'],['D8','奎屯/独山子 → 乌鲁木齐','约250km','高速回乌市，托运/返程','乌鲁木齐','到乌市再补电']]
+}}
+const spots=[
+['赛里木湖','建议2.5–4小时','7月看湖蓝、草原、雪山倒影；不主打蓝冰。环湖别贪晚。'],['果子沟大桥观景台','建议30–45分钟','必须导航“果子沟大桥观景台/果子沟观景台”，不要只走高速，否则直接过桥看不到全景。'],['伊宁六星街','建议1.5–2小时，傍晚最佳','适合拍照、吃东西、散步；晚上氛围更好。'],['喀赞其民俗区','建议1.5–2小时，傍晚到晚上','适合和六星街同天安排，吃手工冰淇淋、拍蓝色街区。'],['霍城薰衣草','建议45–90分钟','7月上中旬值得，下旬先问花况；如果路线经过伊宁附近可顺路看，不建议绕太远。'],['伊昭公路/白石峰达坂','边走边看，预留3–4小时','天气好很值得；雨雾风大绕行，不要夜走。'],['天马浴河','建议1–1.5小时','值得看，尤其带孩子。提前查当天演出/活动时间，尽量提前到场占位置。'],['夏塔古道','建议4–6小时','坐区间车到核心区，轻徒步看雪山/冰川方向；不要重装徒步。'],['特克斯八卦城/离街','建议1.5–2小时，晚上','轻松休整点，适合吃饭散步。'],['那拉提空中草原','建议3–5小时','优先空中草原线；D7要走独库时，前一晚不要玩太晚。'],['乔尔玛烈士陵园','建议30–45分钟','独库北段中途重要停靠点；顺便观察补电排队情况。'],['独库北段/哈希勒根达坂','建议半天','本行程高潮路段；按预约时段走，不带唐布拉，不赶夜路。']
+]
+const checklist=['手机导航离线地图已下载','当天路线和住宿已确认','独库/伊昭/赛湖天气已查','独库预约入口和时段已截图','车辆电量达到当天要求','胎压正常，玻璃水够','证件、房卡、充电卡/APP都带好','水、零食、药品、纸巾在车上','老人孩子身体状态正常','当天不赶夜路，不临时加远点'];
+let current=localStorage.getItem('route')||'reverse';
+function setRoute(r){current=r;localStorage.setItem('route',r);renderRoute();document.getElementById('currentRouteTag').innerText='当前：'+routes[r].name}
+function toggleRoute(){setRoute(current==='reverse'?'forward':'reverse')}
+function renderRoute(){let r=routes[current];document.getElementById('routeTitle').innerText=r.name;document.getElementById('currentRouteTag').innerText='当前：'+r.name;document.getElementById('routeContent').innerHTML=r.days.map(d=>`<div class="day"><div class="row"><span class="tag blue">${d[0]}</span><span class="tag green">${d[2]}</span><span class="tag amber">宿：${d[4]}</span></div><b>${d[1]}</b><p class="small">${d[3]}</p><p class="small"><b>充电：</b>${d[5]}</p></div>`).join('')}
+function renderSpots(){document.getElementById('spotsContent').innerHTML=spots.map(s=>`<div class="checkpoint"><span class="time">${s[0]}</span><div class="row"><span class="tag">${s[1]}</span></div><div class="small">${s[2]}</div></div>`).join('')}
+function renderChecklist(){document.getElementById('checklist').innerHTML=checklist.map((c,i)=>`<label class="check-item"><input type="checkbox" id="ck${i}" ${localStorage.getItem('ck'+i)==='1'?'checked':''} onchange="localStorage.setItem('ck${i}',this.checked?'1':'0')"><span>${c}</span></label>`).join('')}
+function resetChecklist(){checklist.forEach((_,i)=>localStorage.removeItem('ck'+i));renderChecklist()}
+function showTab(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').then(()=>{document.getElementById('offlineBadge').innerText='已启用离线缓存'}).catch(()=>{document.getElementById('offlineBadge').innerText='本地打开：可查看，安装需HTTPS'})} else {document.getElementById('offlineBadge').innerText='当前浏览器不支持离线缓存'}
+renderRoute();renderSpots();renderChecklist();
+</script>
+</body>
+</html>
